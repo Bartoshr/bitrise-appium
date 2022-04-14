@@ -1,15 +1,18 @@
 ---
 format_version: '8'
-default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
 project_type: other
 trigger_map:
-- push_branch: "*"
+- push_branch: '*'
   workflow: primary
-- pull_request_source_branch: "*"
+- pull_request_source_branch: '*'
   workflow: primary
 workflows:
   primary:
     steps:
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '8'
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.0: {}
@@ -28,7 +31,7 @@ workflows:
             set -x
 
             #export JAVA_HOME
-            export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+            #export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
             export PATH=$PATH:$JAVA_HOME/bin
 
             npm install -g appium --unsafe-perm=true --allow-root
@@ -58,6 +61,6 @@ workflows:
         title: Export Appium Logs
     - custom-test-results-export@0:
         inputs:
-        - search_pattern: "*/target/surefire-reports/junitreports/*"
+        - search_pattern: '*/target/surefire-reports/junitreports/*'
         - test_name: AppiumDemo
     - deploy-to-bitrise-io@1: {}
