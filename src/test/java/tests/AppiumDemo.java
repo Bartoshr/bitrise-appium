@@ -2,6 +2,7 @@ package tests;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -29,12 +30,21 @@ public class AppiumDemo {
 
     @Test
     public void calcDemo(){
-        driver.findElementById("buttonOne").click();
-        driver.findElementById("buttonAdd").click();
-        driver.findElementById("buttonTwo").click();
-        driver.findElementById("buttonEqual").click();
-        Assert.assertEquals(driver.findElementById("editText").getText(),"3");
 
+        WebElement addButton = driver.findElementByXPath("//android.widget.Button[@content-desc=\"Add Button\"]");
+        WebElement inputField = driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.widget.EditText");
+        WebElement item = driver.findElementByXPath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View/android.widget.EditText");
+
+        // Paste input.
+        inputField.click();
+        inputField.sendKeys("Hello world");
+
+        // Add new item.
+        addButton.click();
+        driver.navigate().back();
+
+        // Check item.
+        Assert.assertEquals(item.getText(), "Hello world");
     }
 
 
